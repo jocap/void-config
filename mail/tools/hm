@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# hm: human mail (display messages in a human format)
+
+# -> path Subject [\n] path From [\n]:
+mhdr -dHh Subject:From |
+# -> path Subject + path From [\n]:
+paste - - |
+# -> human path [\t] From [\t] Subject:
+awk -F '\t' '{
+	split($1, f, "/");
+	if (f[5] == "plus" || f[5] == "lists") printf("~/mail/%s/%s", f[5], f[6])
+	else printf("~/mail/%s", f[5])
+	print "\t", $4, "\t", $2
+}' |
+# convert to columns:
+column -ts '	' |
+# display in less (behaving like more, but truncating long lines)
+less -FSXc

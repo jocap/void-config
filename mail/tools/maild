@@ -1,0 +1,95 @@
+#!/bin/sh
+
+# maild is a daemon for mbsync that syncs account $1 every $2 minutes.
+# In addition, it automatically extracts password from PassCmd on
+# startup.
+
+# ----------------------------------------------------------------------
+# Setup
+# ----------------------------------------------------------------------
+
+fifo=~/cfg/mail/mailfifo
+mbsyncrc=~/cfg/mail/mbsyncrc
+default=mailbox
+usage="usage: $0 account [minutes]"
+
+err() { echo $@ 1>&2; exit 1; }
+
+# ----------------------------------------------------------------------
+# Check arguments
+# ----------------------------------------------------------------------
+
+[ $# -lt 1 ] && account=$default || account=$1
+[ $# -gt 2 -o -z "$account" ] && err $usage
+if [ -z "$2" ]; then
+	minutes=30
+else
+	[ "$2" -gt 0 ] && minutes=$2 || err $usage
+fi
+
+# ----------------------------------------------------------------------
+# Replace PassCmd with Pass and store configuration in encrypted file
+# ----------------------------------------------------------------------
+
+config=
+
+while read setting value; do
+	case "$setting" in
+	PassCmd)
+		PassCmd=$(printf '%s\n' "$value" | sed -e 's/^"//' -e 's/^+//' -e 's/"$//') # remove quotes and potential plus
+
+		password=$( (eval $PassCmd) | sed -e 's/"/\"/g') # escape
+		[ -z "$password" ] && err 'password command failed'
+
+		config=${config}$(printf '\nPass "%s"\n' "$password")
+		;;
+	*)
+		config=${config}$(printf '\n%s %s\n' "$setting" "$value")
+		;;
+	esac
+done < "$mbsyncrc"
+
+# ----------------------------------------------------------------------
+# Sync mail every $minutes minutes
+# ----------------------------------------------------------------------
+
+sync() {
+	printf '(%s)\n' $(date +%H:%M)
+
+	# sync account
+	[ -e "$fifo" ] && err '$fifo already exists'
+	mkfifo "$fifo"
+	mbsync -c "$fifo" "$account" & syncpid=$!
+	printf '%s\n' "$config" > "$fifo"
+	rm "$fifo"
+
+	# wait for sync
+	while ps -o pid -p "$syncpid" 1>&-; do sleep 0.5; done
+
+	# check new messages
+	msgs=$(unread)
+	if [ "$msgs" != "$prev_msgs" ]; then
+		new=$(printf '%s\n' "$msgs" | wc -l | tr -d ' ')
+		[ "$new" -gt 1 ] && plural=s || plural=
+		folders=$(printf '%s\n' "$msgs" | hm | awk '{print $1}' | uniq | sep ', ')
+		notify-send "$new new message$plural" "in $folders"
+	fi
+}
+
+syncpid=
+msgs=
+prev_msgs=
+
+trap 'sync' HUP
+
+sync
+
+time=$(date +%s)
+while true; do
+	now=$(date +%s)
+	if [ "$now" -ge "$((time + minutes * 60))" ]; then
+		time=$now
+		sync
+	fi
+	sleep 1
+done

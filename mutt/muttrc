@@ -1,0 +1,42 @@
+# vi: ft=ini
+
+set charset = utf-8
+set mailcap_path = ~/.mutt/mailcap
+set sort = date
+color normal default default
+
+source ~/cfg/mutt/aliases
+
+# SMTP
+
+set realname = "John Ankarström"
+set use_from = yes
+set from = john@ankarstrom.se
+set envelope_from = yes
+set sendmail = /usr/local/bin/msmtp
+
+# Maildir
+
+set mbox_type = Maildir
+set folder = ~/mail
+set spoolfile = +/inbox
+set postponed = +/drafts
+set record = +/sent
+set header_cache = ~/.cache/mutt
+
+# Key bindings
+
+macro index \\t ":set sort = threads<Enter>"
+macro index \\d ":set sort = date<Enter>"
+macro index \\s ":set sort = score<Enter>"
+
+macro index ,i "c+/inbox<Enter>"
+macro index ,a "c+/archive<Enter>"
+macro index ,d "c+/drafts<Enter>"
+macro index ,I "c+/important<Enter>"
+macro index ,j "c+/junk<Enter>"
+macro index ,s "c+/sent<Enter>"
+macro index ,t "c+/trash<Enter>"
+
+macro index ,l "c+/lists/"
+macro index ,p "c+/plus/"

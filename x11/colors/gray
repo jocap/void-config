@@ -1,0 +1,12 @@
+! vi: ft=xres
+#include "colors"
+
+URxvt.background: #1C1C1C
+URxvt.foreground: #FFFFFF
+
+YELLOW: #71A2BE
+BLUE: #86A5FC
+B_BLUE: #7AD0FF
+GRAY: #CFCFCF
+B_GREEN: #56F056
+B_YELLOW: #EDD333

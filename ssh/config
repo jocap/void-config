@@ -1,0 +1,8 @@
+AddKeysToAgent yes
+
+Host server
+HostName ankarstrom.se
+User john
+
+Host hub.darcs.net
+KexAlgorithms diffie-hellman-group-exchange-sha256

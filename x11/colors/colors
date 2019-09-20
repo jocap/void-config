@@ -1,0 +1,17 @@
+#define BLACK     URxvt.color0
+#define RED       URxvt.color1
+#define GREEN     URxvt.color2
+#define YELLOW    URxvt.color3
+#define BLUE      URxvt.color4
+#define MAGENTA   URxvt.color5
+#define CYAN      URxvt.color6
+#define GRAY      URxvt.color7
+
+#define B_BLACK   URxvt.color8
+#define B_RED     URxvt.color9
+#define B_GREEN   URxvt.color10
+#define B_YELLOW  URxvt.color11
+#define B_BLUE    URxvt.color12
+#define B_MAGENTA URxvt.color13
+#define B_CYAN    URxvt.color14
+#define B_GRAY    URxvt.color15

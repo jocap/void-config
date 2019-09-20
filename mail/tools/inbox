@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mlist -is ~/mail/{inbox,plus/*}

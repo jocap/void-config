@@ -1,0 +1,16 @@
+// The Print Screen key (while pressed) chooses the third shift level.
+partial modifier_keys
+xkb_symbols "prsc_switch" {
+  key <PRSC> {
+    type[Group1]="ONE_LEVEL",
+    symbols[Group1] = [ ISO_Level3_Shift ]
+  };
+  include "level3(modifier_mapping)"
+};
+
+// Eliminate the Caps Lock key completely (replace with Control).
+partial modifier_keys
+xkb_symbols "nocaps" {
+    key <CAPS>  {  symbols[Group1]= [ Control_L ] };
+    modifier_map  Control { <CAPS>, <LCTL> };
+};

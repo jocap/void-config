@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=vis
+Comment=highly efficient text editor
+Icon=utilities-terminal
+Exec=urxvt -e in-shell vise
+Categories=System;Development
+MimeType=application/x-shellscript;application/x-perl;text/plain;

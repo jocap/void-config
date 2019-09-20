@@ -1,0 +1,8 @@
+@-moz-document domain(lobste.rs) {
+	/* Replace Submit Story link text */
+	#header { font-size: 99%; }
+}
+
+@-moz-document domain(studentportalen.uu.se) {
+	#navigation .logIn, #navigation .logOut { font-size: 11px !important; }
+}

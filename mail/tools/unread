@@ -1,0 +1,7 @@
+#!/bin/ksh
+
+mlist -s ~/mail/{inbox,plus/*} |
+# remove news:
+fgrep -v 'plus/Nyheter' |
+# sort newest - oldest:
+msort -dr

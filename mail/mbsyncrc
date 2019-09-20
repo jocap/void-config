@@ -1,0 +1,89 @@
+# vi: ft=ini:ts=8:sw=8
+
+# Trash		[mailbox]
+SyncState	*
+
+IMAPAccount	mailbox
+Host		imap.mailbox.org
+SSLType		IMAPS
+User		john@ankarstrom.se
+PassCmd		"+gpg2 --decrypt ~/usr/sct/john@ankarstrom.se.gpg 2> /dev/null"
+
+# ------------------------------------------------------------------------------
+
+IMAPStore	mailbox-remote
+Account		mailbox
+
+MaildirStore	mailbox-local
+Path		~/mail/
+Inbox		~/mail/inbox
+SubFolders	verbatim
+
+# ------------------------------------------------------------------------------
+
+Channel		mailbox-inbox
+Master		:mailbox-remote:INBOX
+Slave		:mailbox-local:inbox
+Create		Both
+Expunge		Both
+
+Channel		mailbox-archive
+Master		:mailbox-remote:Archive
+Slave		:mailbox-local:archive
+Pattern		*
+Create		Both
+Expunge		Both
+
+Channel		mailbox-drafts
+Master		:mailbox-remote:Drafts
+Slave		:mailbox-local:drafts
+Create		Both
+Expunge		Both
+
+Channel		mailbox-sent
+Master		:mailbox-remote:Sent
+Slave		:mailbox-local:sent
+Create		Both
+Expunge		Both
+
+Channel		mailbox-trash
+Master		:mailbox-remote:Trash
+Slave		:mailbox-local:trash
+Create		Both
+Expunge		Both
+
+Channel		mailbox-junk
+Master		:mailbox-remote:Junk
+Slave		:mailbox-local:junk
+Create		Both
+Expunge		Both
+
+# ------------------------------------------------------------------------------
+
+Channel		mailbox-lists
+Master		:mailbox-remote:Lists
+Slave		:mailbox-local:lists
+Pattern		*
+Create		Slave
+Expunge		Slave
+
+Channel		mailbox-plus
+Master		:mailbox-remote:Plus
+Slave		:mailbox-local:plus
+Pattern		*
+Create		Slave
+Expunge		Slave
+
+Channel		mailbox-important
+Master		:mailbox-remote:Viktigt
+Slave		:mailbox-local:important
+Pattern		*
+Create		Slave
+Expunge		Slave
+
+# ------------------------------------------------------------------------------
+
+Group		mailbox
+Channels	mailbox-inbox	mailbox-archive
+Channels	mailbox-drafts	mailbox-sent	mailbox-trash	mailbox-junk
+Channels	mailbox-lists	mailbox-plus	mailbox-important

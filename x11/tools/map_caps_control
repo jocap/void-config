@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Use Return as Control_R
+# and Caps_Lock as Control_L
+
+mod=Hyper_L
+xmodmap -e "keycode 36 = $mod"
+xmodmap -e "remove mod4 = $mod"
+xmodmap -e "add Control = $mod"
+xmodmap -e "keycode any = Return"
+
+xmodmap -e "remove Lock = Caps_Lock"
+xmodmap -e "keysym Caps_Lock = Control_L"
+xmodmap -e "add Control = Control_L"
+
+pgrep xcape || xcape -t 500 -e "$mod=Return"
+
